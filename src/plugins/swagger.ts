@@ -1,4 +1,4 @@
-// Modified by Assistant for: configure swagger plugin
+// Modified by Codex for: configure swagger plugin
 import { FastifyInstance } from 'fastify';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
@@ -12,7 +12,7 @@ export default async function swagger(app: FastifyInstance) {
         version: '1.0.0'
       }
     },
-    exposeRoute: true
+    exposeRoute: process.env.NODE_ENV !== 'production'
   });
 
   await app.register(fastifySwaggerUi, {
@@ -20,6 +20,7 @@ export default async function swagger(app: FastifyInstance) {
     uiConfig: {
       docExpansion: 'list',
       deepLinking: false
-    }
+    },
+    staticCSP: true
   });
 }
