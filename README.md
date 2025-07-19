@@ -1,11 +1,11 @@
-# Dorsium Public API (`dorsium-api`)
+# Dorsium API (`dorsium-api`)
 
-This is the official public API gateway for all Dorsium frontend services and apps.  
+This is the official API gateway for all Dorsium frontend services and apps.  
 It acts as a secure proxy layer between user-facing systems and the Dorsium Internal Service.
 
 ---
 
-## 🔧 Tech Stack
+## Tech Stack
 
 - **Framework:** Fastify (high performance)
 - **Structure:** Modular, Resource-Oriented
@@ -15,7 +15,7 @@ It acts as a secure proxy layer between user-facing systems and the Dorsium Inte
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -31,21 +31,21 @@ src/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ```bash
 git clone https://github.com/dorsium/dorsium-api.git
 cd dorsium-api
-pnpm install
+npm install
 cp .env.example .env
-pnpm dev
+npm dev
 ```
 
 Swagger UI → [http://localhost:3000/docs](http://localhost:3000/docs)
 
 ---
 
-## 🔐 Authentication
+## Authentication
 
 All protected routes require a valid JWT token:
 ```http
@@ -54,21 +54,21 @@ Authorization: Bearer <token>
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ```bash
-pnpm test
+npm test
 ```
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 See [`docs/CONTRIBUTING.md`](./docs/CONTRIBUTING.md) for setup, code style, and PR rules.
 
 ---
 
-## 🏗️ Status
+## Status
 
 - ✅ Public routes: `/auth`, `/register`, `/nft`, `/system`
 - 🔒 Connects securely to the Dorsium Internal Service
