@@ -1,14 +1,9 @@
-import Fastify from 'fastify';
 import { config } from 'dotenv';
-import swagger from './plugins/swagger.js';
+import { buildServer } from './server.js';
 
 config();
 
-const app = Fastify();
-
-app.register(swagger);
-
-app.get('/health', async () => ({ ok: true }));
+const app = buildServer();
 
 const start = async () => {
   try {
