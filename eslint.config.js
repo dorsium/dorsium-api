@@ -1,9 +1,14 @@
+import js from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import promise from 'eslint-plugin-promise';
 import n from 'eslint-plugin-n';
 
 export default [
+  js.configs.recommended,
+  ...tsPlugin.configs['flat/recommended'],
+  promise.configs['flat/recommended'],
+  n.configs['flat/recommended'],
   {
     files: ['**/*.ts'],
     languageOptions: {
@@ -13,11 +18,6 @@ export default [
         sourceType: 'module',
         project: './tsconfig.json'
       }
-    },
-    plugins: {
-      '@typescript-eslint': tsPlugin,
-      promise,
-      n
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
