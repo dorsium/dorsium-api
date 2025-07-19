@@ -1,4 +1,3 @@
-<!-- Modified by Contributor for: add missing contribution guide referenced in README -->
 # Contributing to dorsium-api
 
 This guide provides the workflow and code style conventions for contributing to the Dorsium API.
