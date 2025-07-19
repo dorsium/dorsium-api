@@ -1,4 +1,3 @@
-// Modified by ChatGPT for: project initialization
 import Fastify from 'fastify';
 import { config } from 'dotenv';
 import swagger from './plugins/swagger.js';
