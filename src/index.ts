@@ -1,13 +1,11 @@
-import { config } from 'dotenv';
 import { buildServer } from './server.js';
-
-config();
+import { env } from './config/env.js';
 
 const app = buildServer();
 
 const start = async () => {
   try {
-    await app.listen({ port: Number(process.env.PORT) || 3000, host: '0.0.0.0' });
+    await app.listen({ port: Number(env.PORT), host: '0.0.0.0' });
     app.log.info('Server listening');
   } catch (err) {
     app.log.error(err);
