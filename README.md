@@ -38,7 +38,7 @@ git clone https://github.com/dorsium/dorsium-api.git
 cd dorsium-api
 npm install
 cp .env.example .env
-npm dev
+npm run dev
 ```
 
 Swagger UI → [http://localhost:3000/docs](http://localhost:3000/docs)
