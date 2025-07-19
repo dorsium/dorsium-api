@@ -1,4 +1,4 @@
-// Modified by Codex for: configure swagger plugin
+// Modified by <Name> for: configure swagger plugin
 import { FastifyInstance } from 'fastify';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
