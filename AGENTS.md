@@ -47,24 +47,11 @@ This document defines strict contribution guidelines when reviewing or optimizin
 Every structural change proposed must:
 
 - Include a commit message in English
-- Include a comment at the top of modified files:  
-  `// Modified by Name for: <reason>`
 - Be consistent across all related modules
 - Maintain full TypeScript and ESLint compliance
 - Not break Swagger auto-generation
 
 ## Output Format
-
-Must respond using:
-```ts
-// Start task: <summary>
-// Files: <list>
-// Goal: <technical goal>
-
-// ...Modified files here...
-
-// End task
-```
 
 Only necessary changes. No extra formatting, console logs, or unrelated refactors unless explicitly requested.
 
