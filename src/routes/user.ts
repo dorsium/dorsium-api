@@ -21,7 +21,13 @@ const loginSchema = z.object({
 });
 
 export default async function userRoutes(app: FastifyInstance) {
-  app.post('/users', async (request, reply) => {
+  app.post('/users', {
+    schema: {
+      tags: ['User'],
+      body: { $ref: 'UserInput' },
+      response: { 200: { $ref: 'UserResponse' } }
+    }
+  }, async (request, reply) => {
     try {
       const body = createSchema.parse(request.body);
       const data = await registerUser(body);
@@ -33,7 +39,13 @@ export default async function userRoutes(app: FastifyInstance) {
     }
   });
 
-  app.post('/login', async (request, reply) => {
+  app.post('/login', {
+    schema: {
+      tags: ['User'],
+      body: { $ref: 'LoginInput' },
+      response: { 200: { $ref: 'TokenResponse' } }
+    }
+  }, async (request, reply) => {
     try {
       const body = loginSchema.parse(request.body);
       const user = await verifyCredentials(body);
@@ -46,7 +58,17 @@ export default async function userRoutes(app: FastifyInstance) {
     }
   });
 
-  app.get('/users/:id', async (request, reply) => {
+  app.get('/users/:id', {
+    schema: {
+      tags: ['User'],
+      params: {
+        type: 'object',
+        properties: { id: { type: 'integer' } },
+        required: ['id']
+      },
+      response: { 200: { $ref: 'UserResponse' } }
+    }
+  }, async (request, reply) => {
     try {
       const { id } = paramsSchema.parse(request.params);
       const data = await getUser(id);
