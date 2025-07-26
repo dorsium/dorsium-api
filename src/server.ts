@@ -3,6 +3,7 @@ import swagger from './plugins/swagger.js';
 import auth from './plugins/auth.js';
 import exampleRoutes from './routes/example.js';
 import registerRoutes from './routes/register.js';
+import userRoutes from './routes/user.js';
 
 export function buildServer(): FastifyInstance {
   const app = Fastify();
@@ -14,6 +15,7 @@ export function buildServer(): FastifyInstance {
 
   app.register(exampleRoutes);
   app.register(registerRoutes);
+  app.register(userRoutes);
 
   return app;
 }
