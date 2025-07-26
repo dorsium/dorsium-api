@@ -11,7 +11,6 @@ It acts as a secure proxy layer between user-facing systems and the Dorsium Inte
 - **Structure:** Modular, Resource-Oriented
 - **Validation:** Zod
 - **Docs:** Swagger (auto-generated)
-- **Auth:** JWT (via `Authorization: Bearer`)
 
 ---
 
@@ -31,6 +30,13 @@ src/
 
 ---
 
+## How It Works
+
+1. An HTTP request hits a route under `src/routes`.
+2. The route validates input with Zod and forwards the call to a service.
+3. Services use `callInternal` to contact the Dorsium Internal Service.
+4. Responses are returned in the form `{ ok: true, data }`.
+
 ## Getting Started
 
 ```bash
@@ -43,14 +49,28 @@ npm run dev
 
 Swagger UI → [http://localhost:3000/docs](http://localhost:3000/docs)
 
+### Environment Variables
+
+Set these values in `.env` as needed:
+
+- `PORT` - HTTP port to bind (default `3000`)
+- `INTERNAL_SERVICE_URL` - URL of the internal Dorsium service
+
 ---
 
-## Authentication
+## Usage
 
-All protected routes require a valid JWT token:
-```http
-Authorization: Bearer <token>
-```
+1. Verify the service is running with the health check:
+   ```bash
+   curl http://localhost:3000/health
+   ```
+2. Retrieve an example message:
+   ```bash
+   curl http://localhost:3000/example?name=John
+   ```
+
+Routes are defined in `src/routes` and delegate all logic to matching services.
+Services forward requests to the internal API using the `callInternal` helper.
 
 ---
 
@@ -70,6 +90,6 @@ See [`docs/CONTRIBUTING.md`](./docs/CONTRIBUTING.md) for setup, code style, and 
 
 ## Status
 
-- ✅ Public routes: `/auth`, `/register`, `/nft`, `/system`
-- 🔒 Connects securely to the Dorsium Internal Service
+- ✅ Health check and example routes implemented
+- 🔒 Connects to the Dorsium Internal Service through `callInternal`
 - 📘 Swagger auto-doc enabled
