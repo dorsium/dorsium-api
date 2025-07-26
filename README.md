@@ -3,6 +3,9 @@
 This is the official API gateway for all Dorsium frontend services and apps.  
 It acts as a secure proxy layer between user-facing systems and the Dorsium Internal Service.
 
+## Requirements
+- Node.js 21 or later
+
 ---
 
 ## Tech Stack
@@ -32,10 +35,11 @@ src/
 
 ## How It Works
 
-1. An HTTP request hits a route under `src/routes`.
-2. The route validates input with Zod and forwards the call to a service.
-3. Services use `callInternal` to contact the Dorsium Internal Service.
-4. Responses are returned in the form `{ ok: true, data }`.
+1. `buildServer()` loads environment variables and registers Swagger and JWT plugins.
+2. Requests enter the router under `src/routes` where Zod parses the input.
+3. Route handlers delegate all logic to functions in `src/services`.
+4. Services communicate with the Dorsium Internal Service through `callInternal`.
+5. Each handler responds with `{ ok: true, data }` on success.
 
 ## Getting Started
 
@@ -55,22 +59,23 @@ Set these values in `.env` as needed:
 
 - `PORT` - HTTP port to bind (default `3000`)
 - `INTERNAL_SERVICE_URL` - URL of the internal Dorsium service
+- `JWT_SECRET` - secret used for signing JWT tokens
 
 ---
 
-## Usage
+## Using the API
 
-1. Verify the service is running with the health check:
+1. Start the server with `npm run dev` in development or `npm start` after building.
+2. Visit `http://localhost:3000/docs` for interactive Swagger documentation.
+3. Check the service status:
    ```bash
    curl http://localhost:3000/health
    ```
-2. Retrieve an example message:
+4. Call the example endpoint:
    ```bash
    curl http://localhost:3000/example?name=John
    ```
-
-Routes are defined in `src/routes` and delegate all logic to matching services.
-Services forward requests to the internal API using the `callInternal` helper.
+Routes are organized in `src/routes` and forward logic to `src/services`, which talk to the internal API via `callInternal`.
 
 ---
 
