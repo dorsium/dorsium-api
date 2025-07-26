@@ -53,6 +53,8 @@ npm run dev
 
 Swagger UI → [http://localhost:3000/docs](http://localhost:3000/docs)
 
+See [`docs/database.md`](./docs/database.md) for database initialization.
+
 ### Environment Variables
 
 Set these values in `.env` as needed:
