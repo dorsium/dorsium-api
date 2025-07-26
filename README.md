@@ -75,6 +75,16 @@ Set these values in `.env` as needed:
    ```bash
    curl http://localhost:3000/example?name=John
    ```
+5. Create a user:
+   ```bash
+   curl -X POST http://localhost:3000/users \
+     -H 'Content-Type: application/json' \
+     -d '{"name":"John","username":"johnny"}'
+   ```
+6. Fetch a user:
+   ```bash
+   curl http://localhost:3000/users/1
+   ```
 Routes are organized in `src/routes` and forward logic to `src/services`, which talk to the internal API via `callInternal`.
 
 ---
@@ -96,5 +106,6 @@ See [`docs/CONTRIBUTING.md`](./docs/CONTRIBUTING.md) for setup, code style, and 
 ## Status
 
 - ✅ Health check and example routes implemented
+- ✅ User creation and fetch routes available
 - 🔒 Connects to the Dorsium Internal Service through `callInternal`
 - 📘 Swagger auto-doc enabled
