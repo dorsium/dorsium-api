@@ -16,11 +16,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@fastify/jwt": "^9.1.0",
+    "@fastify/swagger": "^9.5.1",
+    "@fastify/swagger-ui": "^5.2.3",
     "dotenv": "^17.2.0",
     "fastify": "^5.4.0",
-    "zod": "^4.0.5",
-    "@fastify/swagger": "^9.5.1",
-    "@fastify/swagger-ui": "^5.2.3"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.37.0",
