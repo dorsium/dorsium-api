@@ -1,3 +1,5 @@
+import { env } from '../config/env.js';
+
 export interface InternalRequestOptions {
   method: string;
   path: string;
@@ -6,7 +8,7 @@ export interface InternalRequestOptions {
 }
 
 export async function callInternal<T>(options: InternalRequestOptions): Promise<T> {
-  const url = new URL(options.path, process.env.INTERNAL_SERVICE_URL ?? 'http://localhost:4000');
+  const url = new URL(options.path, env.INTERNAL_SERVICE_URL);
   if (options.query) {
     for (const [key, value] of Object.entries(options.query)) {
       if (value !== undefined) url.searchParams.set(key, value);
