@@ -1,4 +1,5 @@
 import Fastify, { FastifyInstance } from 'fastify';
+import { env } from './config/env.js';
 import swagger from './plugins/swagger.js';
 import auth from './plugins/auth.js';
 import rateLimit from './plugins/rateLimit.js';
@@ -7,7 +8,7 @@ import registerRoutes from './routes/register.js';
 import userRoutes from './routes/user.js';
 
 export function buildServer(): FastifyInstance {
-  const app = Fastify();
+  const app = Fastify({ logger: { level: env.LOG_LEVEL } });
 
   app.register(swagger);
   app.register(auth);
