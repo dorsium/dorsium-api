@@ -62,6 +62,7 @@ Set these values in `.env` as needed:
 - `PORT` - HTTP port to bind (default `3000`)
 - `INTERNAL_SERVICE_URL` - URL of the internal Dorsium service
 - `JWT_SECRET` - secret used for signing JWT tokens
+- `LOG_LEVEL` - Fastify logger level (default `info`)
 
 ---
 

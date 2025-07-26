@@ -10,7 +10,8 @@ const envSchema = z.object({
   SUPABASE_URL: z.string().url().default('http://localhost:54321'),
   SUPABASE_SERVICE_ROLE_KEY: z.string().default('supabase-key'),
   RATE_LIMIT_MAX: z.string().default('100'),
-  RATE_LIMIT_TIME_WINDOW: z.string().default('60000')
+  RATE_LIMIT_TIME_WINDOW: z.string().default('60000'),
+  LOG_LEVEL: z.string().default('info')
 });
 
 export const env = envSchema.parse(process.env);
