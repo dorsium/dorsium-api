@@ -1,4 +1,9 @@
 import { env } from '../config/env.js';
+import {
+  InternalNetworkError,
+  InternalParseError,
+  InternalResponseError
+} from './errors.js';
 
 export interface InternalRequestOptions {
   method: string;
@@ -14,15 +19,25 @@ export async function callInternal<T>(options: InternalRequestOptions): Promise<
       if (value !== undefined) url.searchParams.set(key, value);
     }
   }
-  const res = await fetch(url.toString(), {
-    method: options.method,
-    headers: { 'Content-Type': 'application/json' },
-    body: options.body ? JSON.stringify(options.body) : undefined
-  });
 
-  if (!res.ok) {
-    throw new Error(`Internal service error: ${res.status}`);
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), {
+      method: options.method,
+      headers: { 'Content-Type': 'application/json' },
+      body: options.body ? JSON.stringify(options.body) : undefined
+    });
+  } catch (err) {
+    throw new InternalNetworkError((err as Error).message);
   }
 
-  return (await res.json()) as T;
+  if (!res.ok) {
+    throw new InternalResponseError(res.status);
+  }
+
+  try {
+    return (await res.json()) as T;
+  } catch {
+    throw new InternalParseError();
+  }
 }
