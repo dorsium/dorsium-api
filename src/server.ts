@@ -13,11 +13,13 @@ export function buildServer(): FastifyInstance {
   app.register(auth);
   app.register(rateLimit);
 
-  app.get('/health', async () => ({ ok: true }));
+  app.after(() => {
+    app.get('/health', async () => ({ ok: true }));
 
-  app.register(exampleRoutes);
-  app.register(registerRoutes);
-  app.register(userRoutes);
+    app.register(exampleRoutes);
+    app.register(registerRoutes);
+    app.register(userRoutes);
+  });
 
   return app;
 }
