@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import fastifyPlugin from 'fastify-plugin';
 import fastifyJwt from '@fastify/jwt';
 import { env } from '../config/env.js';
 
@@ -13,10 +14,12 @@ export async function authenticate(
   }
 }
 
-export default async function auth(app: FastifyInstance) {
+async function auth(app: FastifyInstance) {
   await app.register(fastifyJwt, { secret: env.JWT_SECRET });
   app.decorate('authenticate', authenticate);
 }
+
+export default fastifyPlugin(auth);
 
  
 declare module 'fastify' {

@@ -1,6 +1,10 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { registerUser, getUser } from '../services/userService.js';
+import {
+  registerUser,
+  getUser,
+  verifyCredentials
+} from '../services/userService.js';
 
 const createSchema = z.object({
   name: z.string(),
@@ -9,6 +13,11 @@ const createSchema = z.object({
 
 const paramsSchema = z.object({
   id: z.coerce.number()
+});
+
+const loginSchema = z.object({
+  username: z.string(),
+  password: z.string()
 });
 
 export default async function userRoutes(app: FastifyInstance) {
@@ -21,6 +30,19 @@ export default async function userRoutes(app: FastifyInstance) {
       request.log.error(err);
       reply.code(500);
       return { ok: false, error: 'User creation failed', status: 500 };
+    }
+  });
+
+  app.post('/login', async (request, reply) => {
+    try {
+      const body = loginSchema.parse(request.body);
+      const user = await verifyCredentials(body);
+      const token = await reply.jwtSign({ id: user.id });
+      return { ok: true, data: { token } };
+    } catch (err) {
+      request.log.error(err);
+      reply.code(401);
+      return { ok: false, error: 'Invalid credentials', status: 401 };
     }
   });
 
