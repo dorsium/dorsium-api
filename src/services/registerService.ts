@@ -38,7 +38,7 @@ export async function registerUser(
     await disSetPreference(userId, defaultPreference);
     await disSetSocials(userId, defaultSocials);
     return user;
-  } catch {
-    throw new Error('User registration failed');
+  } catch (err) {
+    throw new Error('User registration failed', { cause: err as Error });
   }
 }
