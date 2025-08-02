@@ -1,45 +1,85 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-vi.mock('../src/services/registerService.js', () => ({
-  registerUser: vi.fn()
-}));
-
-import { buildServer } from '../src/server.js';
+import {
+  disCreateUser,
+  disAssignRole,
+  disSetPreference,
+  disSetSocials
+} from '../src/utils/disClient.js';
 import { registerUser } from '../src/services/registerService.js';
 
-const mockedRegisterUser = registerUser as unknown as ReturnType<typeof vi.fn>;
+vi.mock('../src/utils/disClient.js', () => ({
+  disCreateUser: vi.fn(),
+  disAssignRole: vi.fn(),
+  disSetPreference: vi.fn(),
+  disSetSocials: vi.fn()
+}));
 
-const payload = {
-  name: 'John Doe',
-  username: 'johndoe',
-  authUserId: '11111111-1111-1111-8111-111111111111',
-  country: 'US'
-};
+const mockedDisCreateUser = disCreateUser as unknown as ReturnType<
+  typeof vi.fn
+>;
+const mockedDisAssignRole = disAssignRole as unknown as ReturnType<
+  typeof vi.fn
+>;
+const mockedDisSetPreference = disSetPreference as unknown as ReturnType<
+  typeof vi.fn
+>;
+const mockedDisSetSocials = disSetSocials as unknown as ReturnType<
+  typeof vi.fn
+>;
 
-describe('POST /register', () => {
+describe('registerUser', () => {
+  const input = {
+    name: 'John Doe',
+    username: 'johndoe',
+    authUserId: '11111111-1111-1111-8111-111111111111',
+    country: 'US'
+  };
+
+  const user = { userId: '1', ...input };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('creates a user', async () => {
-    mockedRegisterUser.mockResolvedValueOnce({ userId: 1, ...payload });
-    const app = buildServer();
-    const res = await app.inject({
-      method: 'POST',
-      url: '/register',
-      payload
-    });
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toMatch(/application\/json/);
-    expect(res.json()).toEqual({ ok: true, data: { userId: 1, ...payload } });
-    expect(mockedRegisterUser).toHaveBeenCalledWith(payload);
+  it('registers a user and assigns role, preferences, and socials', async () => {
+    mockedDisCreateUser.mockResolvedValueOnce(user);
+    mockedDisAssignRole.mockResolvedValueOnce(undefined);
+    mockedDisSetPreference.mockResolvedValueOnce(undefined);
+    mockedDisSetSocials.mockResolvedValueOnce(undefined);
+
+    const result = await registerUser(input);
+
+    expect(mockedDisCreateUser).toHaveBeenCalledWith(input);
+    expect(mockedDisAssignRole).toHaveBeenCalledWith(1, 'node');
+    expect(mockedDisSetPreference).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({
+        receiveUpdates: true,
+        acceptTerms: true,
+        acceptGdpr: true,
+        darkModeEnabled: true,
+        language: 'en',
+        betaFeaturesEnabled: false,
+        timezone: 'Europe/Bucharest'
+      })
+    );
+    expect(mockedDisSetSocials).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({
+        platform: 'x',
+        handle: '@example',
+        verified: false,
+        url: ''
+      })
+    );
+    expect(result).toEqual(user);
   });
 
-  it('handles errors', async () => {
-    mockedRegisterUser.mockRejectedValueOnce(new Error('fail'));
-    const app = buildServer();
-    const res = await app.inject({ method: 'POST', url: '/register', payload });
-    expect(res.statusCode).toBe(500);
-    expect(res.json()).toEqual({ ok: false, error: 'Registration failed', status: 500 });
+  it('throws an error if registration fails', async () => {
+    mockedDisCreateUser.mockRejectedValueOnce(new Error('Oops'));
+
+    await expect(registerUser(input)).rejects.toThrow(
+      'User registration failed'
+    );
   });
 });

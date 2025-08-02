@@ -34,9 +34,13 @@ export async function registerUser(
   try {
     const user = await disCreateUser(input);
     const userId = Number(user.userId);
-    await disAssignRole(userId, defaultRole);
-    await disSetPreference(userId, defaultPreference);
-    await disSetSocials(userId, defaultSocials);
+
+    await Promise.all([
+      disAssignRole(userId, defaultRole),
+      disSetPreference(userId, defaultPreference),
+      disSetSocials(userId, defaultSocials)
+    ]);
+
     return user;
   } catch (err) {
     throw new Error('User registration failed', { cause: err as Error });
